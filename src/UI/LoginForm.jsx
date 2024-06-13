@@ -1,17 +1,23 @@
+import { useNavigate } from "react-router";
 import { useState } from "react";
 import { registerUser } from "../services/api";
 
 function LoginForm() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   function handleSignUp() {
+    if (username.trim() === "") {
+      alert("Username cannot be empty. Please enter a valid username.");
+      return;
+    }
     (async () => {
       try {
         setLoading(true);
-        const data = await registerUser(username, password);
-        console.log(data, "data");
+        await registerUser(username.trim(), password);
+        navigate("role");
       } catch (err) {
         alert(err.message);
         console.error(err.message);

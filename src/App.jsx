@@ -6,21 +6,24 @@ import Household from "./pages/Household";
 import Collectors from "./pages/Collectors";
 import Admin from "./pages/Admin";
 import PageNotFound from "./pages/PageNotFound";
+import { ContextProvider } from "./Context/ContextProvider";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AppLayout />}>
-          <Route index element={<Login />} />
-          <Route path="role" element={<SelectRole />} />
-          <Route path="household" element={<Household />} />
-          <Route path="collector" element={<Collectors />} />
-          <Route path="admin" element={<Admin />} />
-        </Route>
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <ContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<Login />} />
+            <Route path="role" element={<SelectRole />} />
+            <Route path="household" element={<Household />} />
+            <Route path="collector" element={<Collectors />} />
+            <Route path="admin" element={<Admin />} />
+          </Route>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </ContextProvider>
   );
 }
 

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 function HouseholdInput({ houseNumber, setHouseNumber, area, setArea }) {
   return (
     <div className="flex flex-col">

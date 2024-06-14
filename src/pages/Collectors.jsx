@@ -1,11 +1,8 @@
+import React from 'react';
+import CollectorDashboard from '../UI/CollectorDashboard';
+
 function Collectors() {
-  return (
-    <div>
-      <h1 className="text-green font-bold underline underline-offset-2">
-        Hello, Collectors
-      </h1>
-    </div>
-  );
+  return <CollectorDashboard />;
 }
 
 export default Collectors;

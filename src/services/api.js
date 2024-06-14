@@ -30,3 +30,27 @@ export async function registerUser(username, password) {
     throw Error(err);
   }
 }
+
+export async function fetchPendingCollections() {
+  try {
+    const res = await fetch("/api/collections/pending");
+    if (!res.ok) {
+      throw new Error("Failed to fetch pending collections");
+    }
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+export async function fetchCompletedCollections() {
+  try {
+    const res = await fetch("/api/collections/completed");
+    if (!res.ok) {
+      throw new Error("Failed to fetch completed collections");
+    }
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}

@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import { registerUser } from "../services/api";
+import { loginUser, registerUser } from "../services/api";
+import { useUser } from "../Context/ContextProvider";
 
 function LoginForm() {
   const navigate = useNavigate();
+  const { setToken } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,8 +18,32 @@ function LoginForm() {
     (async () => {
       try {
         setLoading(true);
-        await registerUser(username.trim(), password);
+        const data = await registerUser(username.trim(), password);
+        setToken(data.access_token);
         navigate("role");
+      } catch (err) {
+        alert(err.message);
+        console.error(err.message);
+      } finally {
+        setLoading(false);
+        setPassword("");
+        setUsername("");
+      }
+    })();
+  }
+
+  function handleLogin() {
+    if (username.trim() === "") {
+      alert("Username cannot be empty. Please enter a valid username.");
+      return;
+    }
+
+    (async () => {
+      try {
+        setLoading(true);
+        const data = await loginUser(username.trim(), password);
+        setToken(data.access_token);
+        navigate(`${data.role}`);
       } catch (err) {
         alert(err.message);
         console.error(err.message);
@@ -46,7 +72,7 @@ function LoginForm() {
           value={username}
           required
           placeholder="Enter your username"
-          className="w-full md:w-80  p-2 outline-none h-10 border-2 font-body border-black mb-3 placeholder:font-body"
+          className="w-full md:w-80  p-2 outline-none h-10 border-2 font-body border-black mb-3 placeholder:font-body disabled:cursor-not-allowed"
           onChange={(e) => {
             setUsername(e.target.value);
           }}
@@ -61,7 +87,7 @@ function LoginForm() {
           id="password"
           value={password}
           placeholder="Enter your password"
-          className="w-full md:w-80 px-2 outline-none h-10 border-2 border-black placeholder:font-body"
+          className="w-full md:w-80 px-2 outline-none h-10 border-2 border-black placeholder:font-body disabled:cursor-not-allowed"
           onChange={(e) => {
             setPassword(e.target.value);
           }}
@@ -80,6 +106,7 @@ function LoginForm() {
         <button
           className="block border-2 border-green w-full h-9 text-green disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={loading}
+          onClick={handleLogin}
         >
           Log In
         </button>

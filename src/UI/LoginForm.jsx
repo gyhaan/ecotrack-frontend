@@ -11,7 +11,7 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
 
   function handleSignUp() {
-    if (username.trim() === "") {
+    if (username.trim() === "" || !password) {
       alert("Username cannot be empty. Please enter a valid username.");
       return;
     }
@@ -34,8 +34,8 @@ function LoginForm() {
   }
 
   function handleLogin() {
-    if (username.trim() === "") {
-      alert("Username cannot be empty. Please enter a valid username.");
+    if (username.trim() === "" || !password) {
+      alert("Make sure both the username and password are filled.");
       return;
     }
 

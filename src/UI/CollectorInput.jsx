@@ -11,7 +11,7 @@ function CollectorInput({ assignedArea, setAssignedArea }) {
         value={assignedArea}
         required
         placeholder="Enter your area"
-        className="w-full md:w-80  p-2 outline-none h-10 border-2 font-body border-black mb-3 placeholder:font-body disabled:cursor-not-allowed"
+        className="w-full  p-2 outline-none h-10 border-2 font-body border-black mb-3 placeholder:font-body disabled:cursor-not-allowed"
         onChange={(e) => setAssignedArea(e.target.value)}
       />
     </div>

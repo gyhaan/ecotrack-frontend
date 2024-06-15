@@ -18,11 +18,17 @@ const roles = [
 
 function SelectRole() {
   const navigate = useNavigate();
-  const { token } = useUser();
+  const { token, userRole } = useUser();
   const [role, setRole] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
   const [area, setArea] = useState("");
   const [assignedArea, setAssignedArea] = useState("");
+
+  useEffect(() => {
+    if (userRole) {
+      navigate(`/${userRole}`);
+    }
+  }, []);
 
   useEffect(() => {
     setArea("");
@@ -56,10 +62,8 @@ function SelectRole() {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="font-header text-4xl mr-auto md:mr-0 mb-2">
-        Select Your Role
-      </h2>
-      <div className="font-header w-full my-6 text-center text-2xl flex flex-col gap-3 md:w-2/5">
+      <h2 className="font-header text-4xl mb-2">Select Your Role</h2>
+      <div className="font-header w-full my-6 text-center text-2xl flex flex-col gap-3 ">
         {roles.map((el, index) => {
           return (
             <button
@@ -87,19 +91,21 @@ function SelectRole() {
           );
         })}
       </div>
-      {role === "households" ? (
-        <HouseholdInput
-          houseNumber={houseNumber}
-          setHouseNumber={setHouseNumber}
-          area={area}
-          setArea={setArea}
-        />
-      ) : role === "collectors" ? (
-        <CollectorInput
-          assignedArea={assignedArea}
-          setAssignedArea={setAssignedArea}
-        />
-      ) : null}
+      <div className="flex flex-col gap-3 w-full">
+        {role === "households" ? (
+          <HouseholdInput
+            houseNumber={houseNumber}
+            setHouseNumber={setHouseNumber}
+            area={area}
+            setArea={setArea}
+          />
+        ) : role === "collectors" ? (
+          <CollectorInput
+            assignedArea={assignedArea}
+            setAssignedArea={setAssignedArea}
+          />
+        ) : null}
+      </div>
       <button
         className="max-w-fit bg-green h-9 block font-body text-white px-6 disabled:cursor-not-allowed"
         onClick={handleAssignRole}

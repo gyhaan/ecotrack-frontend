@@ -5,7 +5,7 @@ import { useUser } from "../Context/ContextProvider";
 
 function LoginForm() {
   const navigate = useNavigate();
-  const { setToken } = useUser();
+  const { setToken, setUserRole } = useUser();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,6 +20,7 @@ function LoginForm() {
         setLoading(true);
         const data = await registerUser(username.trim(), password);
         setToken(data.access_token);
+        sessionStorage.setItem("token", data.access_token);
         navigate("role");
       } catch (err) {
         alert(err.message);
@@ -43,7 +44,14 @@ function LoginForm() {
         setLoading(true);
         const data = await loginUser(username.trim(), password);
         setToken(data.access_token);
-        navigate(`${data.role}`);
+        sessionStorage.setItem("token", data.access_token);
+        if (!data.role) {
+          navigate("role");
+        } else {
+          setUserRole(`${data.role}`);
+          sessionStorage.setItem("role", data.role);
+          navigate(`${data.role}`);
+        }
       } catch (err) {
         alert(err.message);
         console.error(err.message);

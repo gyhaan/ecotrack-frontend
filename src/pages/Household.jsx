@@ -1,9 +1,16 @@
+import HouseholdAmountDisposed from "../UI/HouseholdAmountDisposed";
+import HouseholdCompletedCollection from "../UI/HouseholdCompletedCollection";
+import HouseholdDatePicker from "../UI/HouseholdDatePicker";
+import HouseholdPendingCollection from "../UI/HouseholdPendingCollection";
+
 function Household() {
   return (
-    <div>
-      <h1 className="text-green font-bold underline underline-offset-2">
-        Hello, Household
-      </h1>
+    <div className="font-body flex flex-col gap-4">
+      <h3 className="font-bold text-xl">Welcome to EcoTrack, Name</h3>
+      <HouseholdDatePicker />
+      <HouseholdAmountDisposed />
+      <HouseholdPendingCollection />
+      <HouseholdCompletedCollection />
     </div>
   );
 }

@@ -8,7 +8,7 @@ function AppLayout() {
           <img src="/Logo.svg" alt="logo" />
         </div>
       </header>
-      <main>
+      <main className="flex flex-col items-center">
         <Outlet />
       </main>
     </div>

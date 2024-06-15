@@ -51,6 +51,7 @@ export async function addHousehold(houseNumber, area, token) {
     }
 
     const data = await res.json();
+    console.log(data);
     return data;
   } catch (err) {
     throw new Error(err.message);
@@ -123,5 +124,27 @@ export async function fetchCompletedCollections() {
     return await res.json();
   } catch (err) {
     throw new Error(err.message);
+  }
+}
+
+export async function fetchCollectionDates(token) {
+  try {
+    const res = await fetch("/api/collection_dates", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to create collection");
+    }
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    throw new Error(err);
   }
 }

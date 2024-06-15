@@ -7,13 +7,21 @@ import Collectors from "./pages/Collectors";
 import Admin from "./pages/Admin";
 import PageNotFound from "./pages/PageNotFound";
 import { ContextProvider } from "./Context/ContextProvider";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
   return (
     <ContextProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AppLayout />}>
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <AppLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<Login />} />
             <Route path="role" element={<SelectRole />} />
             <Route path="household" element={<Household />} />

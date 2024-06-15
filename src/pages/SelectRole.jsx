@@ -18,7 +18,7 @@ const roles = [
 
 function SelectRole() {
   const navigate = useNavigate();
-  const { token, userRole } = useUser();
+  const { token, userRole, setUserRole } = useUser();
   const [role, setRole] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
   const [area, setArea] = useState("");
@@ -72,9 +72,13 @@ function SelectRole() {
               onClick={() => {
                 if (role === el.value) {
                   setRole("");
+                  setUserRole("");
+                  sessionStorage.setItem("role", "");
                   return;
                 }
                 setRole(el.value);
+                setUserRole(el.name.toLowerCase());
+                sessionStorage.setItem("role", el.name.toLowerCase());
               }}
               style={
                 role === el.value

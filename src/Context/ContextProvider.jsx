@@ -2,10 +2,22 @@ import { useContext, useState } from "react";
 import { createContext } from "react";
 
 const UserContext = createContext(null);
+
 function ContextProvider({ children }) {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(function () {
+    const value = sessionStorage.getItem("token");
+    return value || "";
+  });
+
+  const [userRole, setUserRole] = useState(function () {
+    const value = sessionStorage.getItem("role");
+    return value || "";
+  });
+
+  console.log(userRole);
+
   return (
-    <UserContext.Provider value={{ token, setToken }}>
+    <UserContext.Provider value={{ token, setToken, userRole, setUserRole }}>
       {children}
     </UserContext.Provider>
   );

@@ -54,6 +54,7 @@ export async function addHousehold(houseNumber, area, token) {
     }
 
     const data = await res.json();
+    console.log(data);
     return data;
   } catch (err) {
     throw new Error(err.message);
@@ -94,6 +95,76 @@ export async function loginUser(username, password) {
 
     if (!res.ok) {
       throw new Error("Looks like something went wrong");
+    }
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err.message);
+    throw Error(err.message);
+  }
+}
+
+export async function fetchPendingCollections() {
+  try {
+    const res = await fetch(`/api/households`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        house_number: houseNumber,
+        area,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Looks like something wrong!! Try Again.");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+export async function addCollector(assignedArea, token) {
+  try {
+    const res = await fetch(`/api/households`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ allocated_area: assignedArea }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Looks like something wrong!! Try Again.");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+export async function fetchCollectionDates(token) {
+  try {
+    const res = await fetch("/api/collection_dates", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to create collection");
     }
 
     const data = await res.json();

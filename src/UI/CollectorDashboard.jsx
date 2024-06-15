@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchPendingCollections, fetchCompletedCollections } from "../services/api";
 
-export default function CollectorDashboard() {
+export default function CollectorDashboard({ token }) {
     const [pendingCollections, setPendingCollections] = useState([]);
     const [completedCollections, setCompletedCollections] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -26,6 +26,33 @@ export default function CollectorDashboard() {
         loadData();
     }, []);
 
+    const handleCompleteCollection = async (collectionId) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/collection_requests/${collectionId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ status: "completed" }),
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to complete the collection");
+            }
+
+            // Refresh the collections data after successful completion
+            const [pending, completed] = await Promise.all([
+                fetchPendingCollections(),
+                fetchCompletedCollections(),
+            ]);
+            setPendingCollections(pending);
+            setCompletedCollections(completed);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     return (
         <div className="bg-[#FFFFFF] flex flex-col items-center p-10 box-border">
             <header className="flex items-center space-x-3 mb-8">
@@ -41,7 +68,12 @@ export default function CollectorDashboard() {
                     {pendingCollections.map((collection) => (
                         <li key={collection.id} className="flex justify-between items-center p-4 bg-yellow-100 rounded">
                             <span>{new Date(collection.date).toLocaleDateString()}</span>
-                            <button className="bg-green-500 text-white px-3 py-1 rounded">Done</button>
+                            <button
+                                className="bg-green-500 text-white px-3 py-1 rounded"
+                                onClick={() => handleCompleteCollection(collection.id)}
+                            >
+                                Done
+                            </button>
                         </li>
                     ))}
                 </ul>

@@ -1,3 +1,6 @@
+import { useUser } from "../Context/ContextProvider";
+
+
 export async function registerUser(username, password) {
   try {
     const res = await fetch("/api/register", {
@@ -25,32 +28,117 @@ export async function registerUser(username, password) {
       }
     }
     const data = await res.json();
+    console.log(data);
     return data;
   } catch (err) {
     throw Error(err);
   }
 }
 
-export async function fetchPendingCollections() {
+export async function addHousehold(houseNumber, area, token) {
   try {
-    const res = await fetch("/api/collections/pending");
+    const res = await fetch(`/api/households`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        house_number: houseNumber,
+        area,
+      }),
+    });
+
     if (!res.ok) {
-      throw new Error("Failed to fetch pending collections");
+      throw new Error("Looks like something wrong!! Try Again.");
     }
-    return await res.json();
+
+    const data = await res.json();
+    return data;
   } catch (err) {
     throw new Error(err.message);
   }
 }
 
-export async function fetchCompletedCollections() {
+export async function addCollector(assignedArea, token) {
   try {
-    const res = await fetch("/api/collections/completed");
+    const res = await fetch(`/api/households`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ allocated_area: assignedArea }),
+    });
+
     if (!res.ok) {
-      throw new Error("Failed to fetch completed collections");
+      throw new Error("Looks like something wrong!! Try Again.");
     }
-    return await res.json();
+
+    const data = await res.json();
+    return data;
   } catch (err) {
     throw new Error(err.message);
   }
+}
+
+export async function loginUser(username, password) {
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Looks like something went wrong");
+    }
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err.message);
+    throw Error(err.message);
+  }
+}
+
+
+
+export async function fetchPendingCollections() {
+    const { token } = useUser();
+    try {
+        const res = await fetch(`${API_BASE_URL}/collection_dates`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (!res.ok) {
+            throw new Error("Failed to fetch pending collections");
+        }
+        const data = await res.json();
+        return data.filter((date) => date.collection_requests.some((request) => request.status === "pending"));
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+export async function fetchCompletedCollections() {
+    const { token } = useUser();
+    try {
+        const res = await fetch(`${API_BASE_URL}/collection_dates`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (!res.ok) {
+            throw new Error("Failed to fetch completed collections");
+        }
+        const data = await res.json();
+        return data.filter((date) => date.collection_requests.every((request) => request.status === "completed"));
+    } catch (err) {
+        throw new Error(err.message);
+    }
 }

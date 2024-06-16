@@ -1,4 +1,3 @@
-
 export async function registerUser(username, password) {
   try {
     const res = await fetch("/api/register", {
@@ -104,35 +103,9 @@ export async function loginUser(username, password) {
   }
 }
 
-export async function fetchPendingCollections(token) {
-  try {
-    const res = await fetch(`/api/households`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        house_number: houseNumber,
-        area,
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Looks like something wrong!! Try Again.");
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    throw new Error(err.message);
-  }
-}
-
-
 export async function fetchCollectionDates(token) {
   try {
-    const res = await fetch("/api/collection_dates", {
+    const res = await fetch(`/api/collection_dates`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -141,32 +114,35 @@ export async function fetchCollectionDates(token) {
     });
 
     if (!res.ok) {
-      throw new Error("Failed to create collection");
+      throw new Error("Looks like something wrong!! Try Again.");
     }
 
     const data = await res.json();
     console.log(data);
     return data;
   } catch (err) {
-    console.error(err.message);
-    throw Error(err.message);
+    console.log(err);
+    throw new Error(err.message);
   }
 }
 
-
 export async function fetchCompletedCollections(token) {
-    try {
-        const res = await fetch(`${API_BASE_URL}/collection_dates`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (!res.ok) {
-            throw new Error("Failed to fetch completed collections");
-        }
-        const data = await res.json();
-        return data.filter((date) => date.collection_requests.every((request) => request.status === "completed"));
-    } catch (err) {
-        throw new Error(err.message);
+  try {
+    const res = await fetch(`/api/collection_dates`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch completed collections");
     }
+    const data = await res.json();
+    return data.filter((date) =>
+      date.collection_requests.every(
+        (request) => request.status === "completed"
+      )
+    );
+  } catch (err) {
+    throw new Error(err.message);
+  }
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { addCollector, addHousehold } from "../services/api";
-import HouseholdInput from "../UI/HouseholdInput";
-import CollectorInput from "../UI/CollectorInput";
+import HouseholdInput from "../UI/Household/HouseholdInput";
+import CollectorInput from "../UI/Collector/CollectorInput";
 import { useUser } from "../Context/ContextProvider";
 import { useNavigate } from "react-router";
 
@@ -18,7 +18,7 @@ const roles = [
 
 function SelectRole() {
   const navigate = useNavigate();
-  const { token, userRole } = useUser();
+  const { token, userRole, setUserRole } = useUser();
   const [role, setRole] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
   const [area, setArea] = useState("");
@@ -28,7 +28,7 @@ function SelectRole() {
     if (userRole) {
       navigate(`/${userRole}`);
     }
-  }, []);
+  }, [userRole, navigate]);
 
   useEffect(() => {
     setArea("");
@@ -49,9 +49,13 @@ function SelectRole() {
       try {
         if (role === "households") {
           await addHousehold(houseNumber, area, token);
+          setUserRole("household");
+          sessionStorage.setItem("role", "household");
           navigate(`/household`);
         } else {
           await addCollector(assignedArea, token);
+          setUserRole("collector");
+          sessionStorage.setItem("role", "collector");
           navigate(`/collector`);
         }
       } catch (err) {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {
   fetchPendingCollections,
   fetchCompletedCollections,
-} from "../services/api";
+} from "../../services/api";
 
 export default function CollectorDashboard() {
   const [pendingCollections, setPendingCollections] = useState([]);

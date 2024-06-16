@@ -1,5 +1,3 @@
-import { useUser } from "../Context/ContextProvider";
-
 
 export async function registerUser(username, password) {
   try {
@@ -63,7 +61,7 @@ export async function addHousehold(houseNumber, area, token) {
 
 export async function addCollector(assignedArea, token) {
   try {
-    const res = await fetch(`/api/households`, {
+    const res = await fetch(`/api/collectors`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,7 +104,7 @@ export async function loginUser(username, password) {
   }
 }
 
-export async function fetchPendingCollections() {
+export async function fetchPendingCollections(token) {
   try {
     const res = await fetch(`/api/households`, {
       method: "POST",
@@ -131,27 +129,6 @@ export async function fetchPendingCollections() {
   }
 }
 
-export async function addCollector(assignedArea, token) {
-  try {
-    const res = await fetch(`/api/households`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ allocated_area: assignedArea }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Looks like something wrong!! Try Again.");
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    throw new Error(err.message);
-  }
-}
 
 export async function fetchCollectionDates(token) {
   try {
@@ -177,27 +154,7 @@ export async function fetchCollectionDates(token) {
 }
 
 
-
-export async function fetchPendingCollections() {
-    const { token } = useUser();
-    try {
-        const res = await fetch(`${API_BASE_URL}/collection_dates`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (!res.ok) {
-            throw new Error("Failed to fetch pending collections");
-        }
-        const data = await res.json();
-        return data.filter((date) => date.collection_requests.some((request) => request.status === "pending"));
-    } catch (err) {
-        throw new Error(err.message);
-    }
-}
-
-export async function fetchCompletedCollections() {
-    const { token } = useUser();
+export async function fetchCompletedCollections(token) {
     try {
         const res = await fetch(`${API_BASE_URL}/collection_dates`, {
             headers: {

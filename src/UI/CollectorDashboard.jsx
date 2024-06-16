@@ -3,8 +3,10 @@ import {
   fetchPendingCollections,
   fetchCompletedCollections,
 } from "../services/api";
+import { useUser } from "../Context/ContextProvider";
 
 export default function CollectorDashboard() {
+  const { token } = useUser();
   const [pendingCollections, setPendingCollections] = useState([]);
   const [completedCollections, setCompletedCollections] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,9 +16,9 @@ export default function CollectorDashboard() {
     async function loadData() {
       try {
         setLoading(true);
-        const [pending, completed] = await Promise.all([
-          fetchPendingCollections(),
-          fetchCompletedCollections(),
+        const [pending, completed] = await Promise.allSettled([
+          fetchPendingCollections(token),
+          fetchCompletedCollections(token),
         ]);
         setPendingCollections(pending);
         setCompletedCollections(completed);

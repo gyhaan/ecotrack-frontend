@@ -28,7 +28,7 @@ function SelectRole() {
     if (userRole) {
       navigate(`/${userRole}`);
     }
-  }, []);
+  }, [userRole, navigate]);
 
   useEffect(() => {
     setArea("");

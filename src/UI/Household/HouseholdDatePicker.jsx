@@ -26,6 +26,7 @@ function HouseholdDatePicker() {
     (async () => {
       try {
         const data = await fetchCollectionDates(token);
+        setDates(data);
       } catch (err) {
         console.error(err);
       }
@@ -35,16 +36,20 @@ function HouseholdDatePicker() {
   return (
     <div className="font-body">
       <h4 className="font-semibold mb-1">Available Dates</h4>
-      {fakeData.map((el, i) => {
-        return (
-          <div key={i} className="flex items-center gap-5 ">
-            <p>{new Date(el.date).toDateString()}</p>
-            <button className="bg-green text-white text-sm px-3 py-1">
-              Book
-            </button>
-          </div>
-        );
-      })}
+      {dates.length ? (
+        dates.map((el, i) => {
+          return (
+            <div key={i} className="flex items-center gap-5 ">
+              <p>{new Date(el.date).toDateString()}</p>
+              <button className="bg-green text-white text-sm px-3 py-1">
+                Book
+              </button>
+            </div>
+          );
+        })
+      ) : (
+        <p>No Dates Available</p>
+      )}
     </div>
   );
 }

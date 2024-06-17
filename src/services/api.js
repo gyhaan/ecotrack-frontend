@@ -169,3 +169,20 @@ export async function addCollectionRequest(token) {
     throw new Error(err);
   }
 }
+
+export async function fetchCollectionRequests(token) {
+  try {
+    const res = await fetch("/api/collection_requests", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

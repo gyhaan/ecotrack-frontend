@@ -134,7 +134,7 @@ export async function createCollectionDate(date, token) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({date}),
+      body: JSON.stringify({ date }),
     });
     if (!res.ok) {
       throw new Error("Failed to create collection date");
@@ -144,7 +144,8 @@ export async function createCollectionDate(date, token) {
     return data;
   } catch (err) {
     throw new Error(err.message);
-  }}
+  }
+}
 
 export async function fetchCompletedCollections(token) {
   try {
@@ -164,5 +165,22 @@ export async function fetchCompletedCollections(token) {
     );
   } catch (err) {
     throw new Error(err.message);
+  }
+}
+
+export async function fetchCollectionRequests(token) {
+  try {
+    const res = await fetch("/api/collection_requests", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    throw new Error(err);
   }
 }

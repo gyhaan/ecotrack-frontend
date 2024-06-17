@@ -1,20 +1,43 @@
-const CollectorPendingCollection = () => {
-    return (
-        <div>
-            <h4 className="font-semibold mb-1">Pending Collections</h4>
-            <div>
-                <div className="flex items-center gap-6">
-                    <div className="flex gap-2 items-center">
-                    <div>
-                        <img src="/yellow.svg" alt="green" />
-                    </div>
-                    <span>{new Date().toDateString()}</span>
-                    </div>
-                    <button className="text-sm max-w-fit bg-green h-7 block font-body text-white px-3 disabled:cursor-not-allowed">Done</button>
-                </div>
+import { useEffect, useState } from "react";
+import { fetchCollectionRequests } from "../../services/api";
+import { useUser } from "../../Context/ContextProvider";
+
+function HouseholdPendingCollection() {
+  const { token } = useUser();
+  const [collectionRequests, setCollectionRequests] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await fetchCollectionRequests(token);
+        setCollectionRequests(() => {
+          return data.filter((el) => el.status === "completed");
+        });
+      } catch (err) {
+        console.error(err.message);
+      }
+    })();
+  }, [token]);
+
+  return (
+    <div>
+      <h4 className="font-semibold mb-1">Pending Collections</h4>
+      <div>
+        {collectionRequests.length ? (
+          collectionRequests?.map((el) => (
+            <div className="flex items-center gap-2" key={el.id}>
+              <div>
+                <img src="/yellow.svg" alt="green" />
+              </div>
+              <span>{new Date(el.collection_date.date).toDateString()}</span>
             </div>
-        </div>
-    )
+          ))
+        ) : (
+          <p>No Requests Made</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
-export default CollectorPendingCollection
+export default HouseholdPendingCollection;

@@ -1,7 +1,7 @@
-import HouseholdAmountDisposed from "../UI/HouseholdAmountDisposed";
-import HouseholdCompletedCollection from "../UI/HouseholdCompletedCollection";
-import HouseholdDatePicker from "../UI/HouseholdDatePicker";
-import HouseholdPendingCollection from "../UI/HouseholdPendingCollection";
+import HouseholdAmountDisposed from "../UI/Household/HouseholdAmountDisposed";
+import HouseholdCompletedCollection from "../UI/Household/HouseholdCompletedCollection";
+import HouseholdDatePicker from "../UI/Household/HouseholdDatePicker";
+import HouseholdPendingCollection from "../UI/Household/HouseholdPendingCollection";
 
 function Household() {
   return (

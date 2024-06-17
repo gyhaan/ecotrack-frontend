@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import {
   fetchPendingCollections,
   fetchCompletedCollections,
-} from "../services/api";
-import { useUser } from "../Context/ContextProvider";
+} from "../../services/api";
+import { useUser } from "../../Context/ContextProvider";
 
 export default function CollectorDashboard() {
   const { token } = useUser();

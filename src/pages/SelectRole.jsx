@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { addCollector, addHousehold } from "../services/api";
-import HouseholdInput from "../UI/HouseholdInput";
-import CollectorInput from "../UI/CollectorInput";
+import HouseholdInput from "../UI/Household/HouseholdInput";
+import CollectorInput from "../UI/Collector/CollectorInput";
 import { useUser } from "../Context/ContextProvider";
 import { useNavigate } from "react-router";
 

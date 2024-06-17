@@ -126,6 +126,26 @@ export async function fetchCollectionDates(token) {
   }
 }
 
+export async function createCollectionDate(date, token) {
+  try {
+    const res = await fetch(`/api/collection_dates`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({date}),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to create collection date");
+    }
+    const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    throw new Error(err.message);
+  }}
+
 export async function fetchCompletedCollections(token) {
   try {
     const res = await fetch(`/api/collection_dates`, {

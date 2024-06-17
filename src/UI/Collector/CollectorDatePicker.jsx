@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createCollectionDate } from "../../services/api";
+import { useUser } from "../../Context/ContextProvider";
 
 const CollectorDatePicker = () => {
     const [date, setDate] = useState("");
+    const { token } = useUser();
+    console.log(date);
     return (
         <div>
             <label htmlFor="date" className="font-semibold">
@@ -19,6 +23,7 @@ const CollectorDatePicker = () => {
             <button
                 className="max-w-fit bg-green h-9 block font-body text-white px-6 disabled:cursor-not-allowed"
                 disabled={!date}
+                onClick={() => createCollectionDate(date, token)}
             >
                 Send
             </button>

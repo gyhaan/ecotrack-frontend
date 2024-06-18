@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchCollectionDates } from "../services/api";
-import { useUser } from "../Context/ContextProvider";
+import { fetchCollectionDates } from "../../services/api";
+import { useUser } from "../../Context/ContextProvider";
 
 function HouseholdDatePicker() {
   const { token } = useUser();

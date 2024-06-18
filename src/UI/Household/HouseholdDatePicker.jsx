@@ -40,7 +40,7 @@ function HouseholdDatePicker() {
         dates.map((el, i) => {
           return (
             <div key={i} className="flex items-center gap-5 ">
-              <p>{new Date(el.date).toDateString()}</p>
+              <p>{new Date(el.collection_date).toDateString()}</p>
               <button className="bg-green text-white text-sm px-3 py-1">
                 Book
               </button>

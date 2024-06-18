@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchCollectionRequests } from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
 
@@ -12,10 +12,15 @@ function HouseholdPendingCollection() {
         const data = await fetchCollectionRequests(token);
         // Ensure data is an array before filtering
         if (Array.isArray(data)) {
-          const filteredRequests = data.filter((el) => el.status === "completed");
+          const filteredRequests = data.filter(
+            (el) => el.status === "completed"
+          );
           setCollectionRequests(filteredRequests);
         } else {
-          console.error("Expected an array of collection requests, but received:", data);
+          console.error(
+            "Expected an array of collection requests, but received:",
+            data
+          );
           setCollectionRequests([]);
         }
       } catch (err) {

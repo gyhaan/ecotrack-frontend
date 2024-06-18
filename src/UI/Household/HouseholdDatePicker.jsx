@@ -22,6 +22,7 @@ function HouseholdDatePicker() {
   const [dates, setDates] = useState([]);
   console.log(dates);
 
+
   useEffect(() => {
     (async () => {
       try {
@@ -50,6 +51,7 @@ function HouseholdDatePicker() {
       ) : (
         <p>No Dates Available</p>
       )}
+
     </div>
   );
 }

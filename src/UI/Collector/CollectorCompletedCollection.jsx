@@ -23,7 +23,6 @@ function HouseholdCompletedCollection() {
     <div>
       <h4 className="font-semibold mb-1">Completed Collections</h4>
       <div>
-
         {collectionRequests.length ? (
           collectionRequests?.map((el) => (
             <div className="flex items-center gap-2" key={el.id}>
@@ -36,7 +35,6 @@ function HouseholdCompletedCollection() {
         ) : (
           <p>No Requests Completed</p>
         )}
-
       </div>
     </div>
   );

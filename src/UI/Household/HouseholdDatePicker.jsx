@@ -2,40 +2,56 @@ import { useEffect, useState } from "react";
 import { fetchCollectionDates } from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
 
+const fakeData = [
+  {
+    id: 0,
+    date: "2024-06-16",
+    collection_requests: [
+      {
+        id: 0,
+        status: "pending",
+        household_id: "string",
+        collection_date_id: 0,
+      },
+    ],
+  },
+];
+
 function HouseholdDatePicker() {
   const { token } = useUser();
-  const [date, setDate] = useState("");
+  const [dates, setDates] = useState([]);
+  console.log(dates);
+
 
   useEffect(() => {
     (async () => {
       try {
-        await fetchCollectionDates(token);
+        const data = await fetchCollectionDates(token);
+        setDates(data);
       } catch (err) {
-        alert(err.message);
+        console.error(err);
       }
     })();
   }, [token]);
 
   return (
-    <div>
-      <label htmlFor="date" className="font-semibold">
-        Choose Waste Collection Date:
-      </label>
-      <input
-        type="date"
-        name="date"
-        id="date"
-        value={date}
-        min={new Date().toISOString().slice(0, 10)}
-        className="w-full p-2 outline-none h-10 border-2 font-body border-black mb-2 placeholder:font-body disabled:cursor-not-allowed"
-        onChange={(e) => setDate(e.target.value.slice(0, 10))}
-      />
-      <button
-        className="max-w-fit bg-green h-9 block font-body text-white px-6 disabled:cursor-not-allowed"
-        disabled={!date}
-      >
-        Send
-      </button>
+    <div className="font-body">
+      <h4 className="font-semibold mb-1">Available Dates</h4>
+      {dates.length ? (
+        dates.map((el, i) => {
+          return (
+            <div key={i} className="flex items-center gap-5 ">
+              <p>{new Date(el.collection_date).toDateString()}</p>
+              <button className="bg-green text-white text-sm px-3 py-1">
+                Book
+              </button>
+            </div>
+          );
+        })
+      ) : (
+        <p>No Dates Available</p>
+      )}
+
     </div>
   );
 }

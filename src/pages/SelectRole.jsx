@@ -49,9 +49,13 @@ function SelectRole() {
       try {
         if (role === "households") {
           await addHousehold(houseNumber, area, token);
+          setUserRole("household");
+          sessionStorage.setItem("role", "household");
           navigate(`/household`);
         } else {
           await addCollector(assignedArea, token);
+          setUserRole("collector");
+          sessionStorage.setItem("role", "collector");
           navigate(`/collector`);
         }
       } catch (err) {

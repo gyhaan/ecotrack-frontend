@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchCollectionRequests } from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
 
@@ -7,16 +7,23 @@ function HouseholdPendingCollection() {
   const [collectionRequests, setCollectionRequests] = useState([]);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const data = await fetchCollectionRequests(token);
-        setCollectionRequests(() => {
-          return data.filter((el) => el.status === "completed");
-        });
+        // Ensure data is an array before filtering
+        if (Array.isArray(data)) {
+          const filteredRequests = data.filter((el) => el.status === "completed");
+          setCollectionRequests(filteredRequests);
+        } else {
+          console.error("Expected an array of collection requests, but received:", data);
+          setCollectionRequests([]);
+        }
       } catch (err) {
-        console.error(err.message);
+        console.error("Error fetching collection requests:", err.message);
       }
-    })();
+    };
+
+    fetchData();
   }, [token]);
 
   return (
@@ -24,7 +31,7 @@ function HouseholdPendingCollection() {
       <h4 className="font-semibold mb-1">Pending Collections</h4>
       <div>
         {collectionRequests.length ? (
-          collectionRequests?.map((el) => (
+          collectionRequests.map((el) => (
             <div className="flex items-center gap-2" key={el.id}>
               <div>
                 <img src="/yellow.svg" alt="green" />

@@ -32,7 +32,7 @@ export async function registerUser(username, password) {
   }
 }
 
-export async function addHousehold(houseNumber, area, token) {
+/* export async function addHousehold(houseNumber, area, token) {
   try {
     const res = await fetch(`/api/households`, {
       method: "POST",
@@ -78,7 +78,54 @@ export async function addCollector(assignedArea, token) {
   } catch (err) {
     throw new Error(err.message);
   }
-}
+} */
+
+
+
+  export async function addHousehold(houseNumber, area, token) {
+    try {
+      const res = await fetch(`/api/households`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ house_number: houseNumber, area }),
+      });
+  
+      if (!res.ok) {
+        throw new Error("Looks like something went wrong!! Try Again.");
+      }
+  
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+  
+  export async function addCollector(assignedArea, token) {
+    try {
+      const res = await fetch(`/api/collectors`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ allocated_area: assignedArea }),
+      });
+  
+      if (!res.ok) {
+        throw new Error("Looks like something went wrong!! Try Again.");
+      }
+  
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }  
+  
 
 export async function loginUser(username, password) {
   try {

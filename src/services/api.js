@@ -202,10 +202,28 @@ export async function fetchCompletedCollections(token) {
       throw new Error("Failed to fetch completed collections");
     }
     const data = await res.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err.message);
+    throw Error(err.message);
+  }
+}
+
+export async function fetchPendingCollections() {
+  const { token } = useUser();
+  try {
+    const res = await fetch(`/api/collection_dates`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch pending collections");
+    }
+    const data = await res.json();
     return data.filter((date) =>
-      date.collection_requests.every(
-        (request) => request.status === "completed"
-      )
+      date.collection_requests.some((request) => request.status === "pending")
     );
   } catch (err) {
     throw new Error(err.message);

@@ -76,9 +76,13 @@ function SelectRole() {
               onClick={() => {
                 if (role === el.value) {
                   setRole("");
+                  setUserRole("");
+                  sessionStorage.setItem("role", "");
                   return;
                 }
                 setRole(el.value);
+                setUserRole(el.name.toLowerCase());
+                sessionStorage.setItem("role", el.name.toLowerCase());
               }}
               style={
                 role === el.value

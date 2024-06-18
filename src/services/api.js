@@ -1,3 +1,5 @@
+import { useUser } from "../Context/ContextProvider";
+
 export async function registerUser(username, password) {
   try {
     const res = await fetch("/api/register", {
@@ -105,23 +107,24 @@ export async function loginUser(username, password) {
 
 export async function fetchPendingCollections() {
   try {
-    const res = await fetch("/api/collections/pending");
-    if (!res.ok) {
-      throw new Error("Failed to fetch pending collections");
-    }
-    return await res.json();
-  } catch (err) {
-    throw new Error(err.message);
-  }
-}
+    const res = await fetch(`/api/households`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        house_number: houseNumber,
+        area,
+      }),
+    });
 
-export async function fetchCompletedCollections() {
-  try {
-    const res = await fetch("/api/collections/completed");
     if (!res.ok) {
-      throw new Error("Failed to fetch completed collections");
+      throw new Error("Looks like something wrong!! Try Again.");
     }
-    return await res.json();
+
+    const data = await res.json();
+    return data;
   } catch (err) {
     throw new Error(err.message);
   }
@@ -145,7 +148,30 @@ export async function fetchCollectionDates(token) {
     console.log(data);
     return data;
   } catch (err) {
-    throw new Error(err);
+    console.error(err.message);
+    throw Error(err.message);
+  }
+}
+
+export async function fetchCompletedCollections() {
+  const { token } = useUser();
+  try {
+    const res = await fetch(`${API_BASE_URL}/collection_dates`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch completed collections");
+    }
+    const data = await res.json();
+    return data.filter((date) =>
+      date.collection_requests.every(
+        (request) => request.status === "completed"
+      )
+    );
+  } catch (err) {
+    throw new Error(err.message);
   }
 }
 

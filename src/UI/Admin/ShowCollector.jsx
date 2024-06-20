@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const fakeData = [
   {
     id: 0,
@@ -28,7 +30,9 @@ function ShowCollector({ collectors, query }) {
         <ul className="flex flex-col gap-2 list-disc list-inside">
           {results?.map((el) => (
             <li key={el.id} className="text-xl">
-              {el.id}-{el.allocated_area}
+              <Link to={`collector/${el.id}`}>
+                {el.id}-{el.allocated_area}
+              </Link>
             </li>
           ))}
         </ul>

@@ -1,4 +1,7 @@
-import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { deleteHouseHoldById, getHouseHoldById } from "../services/api";
+import { useUser } from "../Context/ContextProvider";
 
 const fakeData = {
   id: 0,
@@ -13,22 +16,52 @@ const fakeData = {
     },
   ],
 };
+
 function ViewHouseholdUser() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { token } = useUser();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getHouseHoldById(id, token);
+        setData(data);
+      } catch (err) {
+        alert(err.message);
+      }
+    })();
+  }, [id, token]);
+
+  function deleteHousehold() {
+    (async () => {
+      try {
+        await deleteHouseHoldById(id, token);
+        navigate(-1);
+      } catch (err) {
+        alert(err.message);
+      }
+    })();
+  }
   return (
-    <div className="font-body flex flex-col gap-3">
-      <div className="flex justify-between">
+    <div className="font-body flex flex-col gap-3 w-full md:w-80">
+      <div className="flex justify-between gap-10">
         <p>
-          {fakeData.house_number}-{fakeData.area}
+          {data?.house_number}-{data?.area}
         </p>
-        <button className="bg-green text-white text-sm px-3 py-1">
+        <button
+          className="bg-green text-white text-sm px-3 py-1"
+          onClick={() => deleteHousehold()}
+        >
           Delete
         </button>
       </div>
       <div>
         <h4 className="font-semibold mb-1">Pending Collections</h4>
         <div>
-          {fakeData.collection_requests.length ? (
-            fakeData.collection_requests.map((el) => {
+          {data?.collection_requests?.length ? (
+            data?.collection_requests?.map((el) => {
               if (el.status === "pending") {
                 return (
                   <div className="flex items-center gap-2" key={el.id}>
@@ -52,8 +85,8 @@ function ViewHouseholdUser() {
       <div>
         <h4 className="font-semibold mb-1">Completed Collections</h4>
         <div>
-          {fakeData.collection_requests.length ? (
-            fakeData.collection_requests.map((el) => {
+          {data?.collection_requests.length ? (
+            data?.collection_requests.map((el) => {
               if (el.status === "completed") {
                 return (
                   <div className="flex items-center gap-2" key={el.id}>

@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
-import { fetchCollectionDates } from "../../services/api";
+import {
+  createCollectionRequest,
+  fetchCollectionDates,
+} from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
+import HouseholdAmountDisposed from "./HouseholdAmountDisposed";
 
 const fakeData = [
   {
@@ -20,7 +24,8 @@ const fakeData = [
 function HouseholdDatePicker() {
   const { token } = useUser();
   const [dates, setDates] = useState([]);
-  console.log(dates);
+  const [amount, setAmount] = useState(0);
+  console.log(typeof amount);
 
   useEffect(() => {
     (async () => {
@@ -33,17 +38,46 @@ function HouseholdDatePicker() {
     })();
   }, [token]);
 
+  function bookCollection(id, amount) {
+    if (Number(amount) <= 0) {
+      alert("Please Enter how many kilos you will dispose");
+      return;
+    }
+    (async () => {
+      try {
+        const data = await createCollectionRequest(id, amount, token);
+        alert(data.message);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }
+
   return (
     <div className="font-body">
       <h4 className="font-semibold mb-1">Available Dates</h4>
       {dates.length ? (
         dates.map((el, i) => {
           return (
-            <div key={i} className="flex items-center gap-5 ">
+            <div key={i} className="flex flex-col gap-2">
               <p>{new Date(el.collection_date).toDateString()}</p>
-              <button className="bg-green text-white text-sm px-3 py-1">
-                Book
-              </button>
+              <div className="flex items-center gap-3 w-full">
+                <input
+                  type="number"
+                  placeholder="Disposal Amount"
+                  name="amount"
+                  id="amount"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-5/12 p-2 outline-none h-8 border-2 font-body border-black placeholder:font-body disabled:cursor-not-allowed"
+                />
+                <button
+                  className="bg-green text-white text-sm h-8 px-3"
+                  onClick={() => bookCollection(el.id, amount)}
+                >
+                  Book
+                </button>
+              </div>
             </div>
           );
         })

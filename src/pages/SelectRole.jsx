@@ -124,10 +124,6 @@ function SelectRole() {
 export default SelectRole;
  */
 
-
-
-
-
 import { useEffect, useState } from "react";
 import { addCollector, addHousehold } from "../services/api";
 import HouseholdInput from "../UI/Household/HouseholdInput";
@@ -142,11 +138,12 @@ const roles = [
 
 function SelectRole() {
   const navigate = useNavigate();
-  const { token, setUserRole } = useUser();
+  const { token, setToken } = useUser();
   const [role, setRole] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
   const [area, setArea] = useState("");
   const [assignedArea, setAssignedArea] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setArea("");
@@ -156,26 +153,32 @@ function SelectRole() {
 
   const handleAssignRole = async () => {
     try {
+      setLoading(true);
       if (role === "households") {
         if (!houseNumber || !area) {
-          alert("Please make sure you have entered both house number and area.");
+          alert(
+            "Please make sure you have entered both house number and area."
+          );
           return;
         }
         await addHousehold(houseNumber, area, token);
-        setUserRole("household");
-        navigate("/household");
       } else if (role === "collectors") {
         if (!assignedArea) {
           alert("Please enter the assigned area.");
           return;
         }
         await addCollector(assignedArea, token);
-        setUserRole("collector");
-        navigate("/collector");
       }
+      setToken("");
+      alert(
+        "You will now be redirected to the login page. Please use your new username and password to log in."
+      );
+      navigate("/");
     } catch (err) {
       console.error(err);
       alert("An error occurred while assigning the role. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -190,7 +193,11 @@ function SelectRole() {
             onClick={() => setRole(role === el.value ? "" : el.value)}
             style={
               role === el.value
-                ? { backgroundColor: "#004D00", borderColor: "#004D00", color: "#fff" }
+                ? {
+                    backgroundColor: "#004D00",
+                    borderColor: "#004D00",
+                    color: "#fff",
+                  }
                 : null
             }
           >
@@ -214,9 +221,9 @@ function SelectRole() {
         ) : null}
       </div>
       <button
-        className="max-w-fit bg-green h-9 block font-body text-white px-6 disabled:cursor-not-allowed"
+        className="max-w-fit bg-green h-9 block font-body text-white px-6 disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={handleAssignRole}
-        disabled={!role}
+        disabled={!role || loading}
       >
         Continue
       </button>
@@ -225,4 +232,3 @@ function SelectRole() {
 }
 
 export default SelectRole;
-

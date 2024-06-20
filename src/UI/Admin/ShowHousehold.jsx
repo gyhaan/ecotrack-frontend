@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const fakeData = [
   {
     id: 0,
@@ -32,7 +34,9 @@ function ShowHousehold({ households, query }) {
         <ul className="flex flex-col gap-2 list-disc list-inside">
           {results?.map((el) => (
             <li key={el.id} className="text-xl">
-              {el.id}-{el.house_number}-{el.area}
+              <Link to={`household/${el.id}`}>
+                {el.id}-{el.house_number}-{el.area}
+              </Link>
             </li>
           ))}
         </ul>

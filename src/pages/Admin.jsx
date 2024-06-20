@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import AdminUserSearch from "../UI/Admin/AdminUserSearch";
 import { getAllCollectors, getAllHouseholds } from "../services/api";
 import { useUser } from "../Context/ContextProvider";
-import ShowHousehold from "../UI/Admin/ShowHousehold";
-import ShowCollector from "../UI/Admin/ShowCollector";
 
 function Admin() {
   const { token } = useUser();
@@ -43,7 +41,7 @@ function Admin() {
   }, [token]);
   return (
     <div className="font-body flex flex-col gap-4">
-      <h3 className="font-bold text-xl">Welcome to EcoTrack, Name</h3>
+      <h3 className="font-bold text-xl">Welcome to EcoTrack</h3>
       <AdminUserSearch households={households} collectors={collectors} />
     </div>
   );

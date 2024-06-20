@@ -233,3 +233,106 @@ export async function getAllCollectors(token) {
     throw Error(err);
   }
 }
+
+export async function getHouseHoldById(id, token) {
+  try {
+    const res = await fetch(`/api/households/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch Data");
+    }
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
+export async function deleteHouseHoldById(id, token) {
+  try {
+    const res = await fetch(`/api/households/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch Data");
+    }
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
+export async function getCollectorById(id, token) {
+  try {
+    const res = await fetch(`/api/collectors/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch Data");
+    }
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
+export async function deleteCollectorById(id, token) {
+  try {
+    const res = await fetch(`/api/collectors/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch Data");
+    }
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
+export async function createCollectionRequest(id, amount, token) {
+  try {
+    console.log(amount, id);
+    const res = await fetch("/api/collection_requests", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount: Number(amount), collection_date_id: id }),
+    });
+
+    console.log(
+      JSON.stringify({ amount: Number(amount), collection_date_id: id })
+    );
+    if (!res.ok) {
+      throw new Error("Failed to Book Session");
+    }
+
+    const data = await res.json();
+    console.log(data.message);
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}

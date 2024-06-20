@@ -195,3 +195,87 @@ export async function fetchCollectionRequests(token) {
     throw new Error(err);
   }
 }
+
+/* 
+export async function getAllCollectors(token) {
+  try {
+    const res = await fetch(`/api/collectors`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch collectors");
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+} */
+/* 
+export async function getAllCollectionDatesbyID(id, token) {
+  try {
+    const res = await fetch(`/api/collection_dates_id/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch collectors");
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+} */
+
+
+export async function addCollectionDate(date, token) {
+  try {
+    const res = await fetch("/api/collections", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ date }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to add collection date");
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}
+
+export async function markCollectionAsCompleted(collectionId, token) {
+  try {
+    const res = await fetch(`/api/collections/complete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ collectionId }),
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to mark collection as completed");
+    }
+
+    return await res.json();
+  } catch (err) {
+    throw new Error(err.message);
+  }
+}

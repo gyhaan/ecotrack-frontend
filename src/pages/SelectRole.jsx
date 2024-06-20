@@ -214,7 +214,7 @@ function SelectRole() {
         ) : null}
       </div>
       <button
-        className="max-w-fit bg-green h-9 block font-body text-white px-6 disabled:cursor-not-allowed"
+        className="max-w-fit bg-green h-9 block font-body text-white px-6 disabled:cursor-not-allowed transition-transform transform hover:bg-green-700 hover:scale-105"
         onClick={handleAssignRole}
         disabled={!role}
       >

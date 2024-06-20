@@ -12,7 +12,7 @@ function HouseholdAmountDisposed() {
           id="amount"
           className="w-5/12 p-2 outline-none h-8 border-2 font-body border-black placeholder:font-body disabled:cursor-not-allowed"
         />
-        <button className="bg-green block font-body rounded-full text-white disabled:cursor-not-allowed w-7 h-7">
+        <button className="bg-green block font-body rounded-full text-white disabled:cursor-not-allowed w-7 h-7 transition-transform transform hover:bg-green-700 hover:scale-105">
           &#43;
         </button>
       </div>

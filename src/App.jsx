@@ -8,6 +8,8 @@ import Admin from "./pages/Admin";
 import PageNotFound from "./pages/PageNotFound";
 import { ContextProvider } from "./Context/ContextProvider";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import ViewHouseholdUser from "./pages/ViewHouseholdUser";
+import ViewCollector from "./pages/ViewCollector";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
             <Route path="household" element={<Household />} />
             <Route path="collector" element={<Collectors />} />
             <Route path="admin" element={<Admin />} />
+            <Route path="admin/household/:id" element={<ViewHouseholdUser />} />
+            <Route path="admin/collector/:id" element={<ViewCollector />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>

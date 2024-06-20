@@ -32,54 +32,6 @@ export async function registerUser(username, password) {
   }
 }
 
-/* export async function addHousehold(houseNumber, area, token) {
-  try {
-    const res = await fetch(`/api/households`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        house_number: houseNumber,
-        area,
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Looks like something wrong!! Try Again.");
-    }
-
-    const data = await res.json();
-    console.log(data);
-    return data;
-  } catch (err) {
-    throw new Error(err.message);
-  }
-}
-
-export async function addCollector(assignedArea, token) {
-  try {
-    const res = await fetch(`/api/collectors`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ allocated_area: assignedArea }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Looks like something wrong!! Try Again.");
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    throw new Error(err.message);
-  }
-} */
-
 export async function addHousehold(houseNumber, area, token) {
   try {
     const res = await fetch(`/api/households`, {
@@ -210,8 +162,7 @@ export async function fetchCompletedCollections(token) {
   }
 }
 
-export async function fetchPendingCollections() {
-  const { token } = useUser();
+export async function fetchPendingCollections(token) {
   try {
     const res = await fetch(`/api/collection_dates`, {
       headers: {
@@ -244,5 +195,41 @@ export async function fetchCollectionRequests(token) {
     return data;
   } catch (err) {
     throw new Error(err);
+  }
+}
+
+export async function getAllHouseholds(token) {
+  try {
+    const res = await fetch("/api/households", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Could not fetch Household");
+    }
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw Error(err.message);
+  }
+}
+
+export async function getAllCollectors(token) {
+  try {
+    const res = await fetch("/api/collectors", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) {
+      throw new Error("Could not fetch Household");
+    }
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err.message);
+    throw Error(err);
   }
 }

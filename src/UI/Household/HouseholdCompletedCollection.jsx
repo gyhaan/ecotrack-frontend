@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchCollectionRequests } from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
 
-function HouseholdPendingCollection() {
+function HouseholdCompletedCollection() {
   const { token } = useUser();
   const [collectionRequests, setCollectionRequests] = useState([]);
   useEffect(() => {
@@ -27,7 +27,9 @@ function HouseholdPendingCollection() {
               <div>
                 <img src="/green.svg" alt="green" />
               </div>
-              <span>{new Date(el.collection_date.date).toDateString()}</span>
+              <span>
+                {new Date(el.collection_date.collection_date).toDateString()}
+              </span>
             </div>
           ))
         ) : (
@@ -37,4 +39,4 @@ function HouseholdPendingCollection() {
     </div>
   );
 }
-export default HouseholdPendingCollection;
+export default HouseholdCompletedCollection;

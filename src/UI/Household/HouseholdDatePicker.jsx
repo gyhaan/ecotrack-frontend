@@ -24,62 +24,39 @@ const fakeData = [
 function HouseholdDatePicker() {
   const { token } = useUser();
   const [dates, setDates] = useState([]);
-  const [amount, setAmount] = useState(0);
-  console.log(typeof amount);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  console.log(dates);
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
+      setError(null);
       try {
         const data = await fetchCollectionDates(token);
         setDates(data);
       } catch (err) {
-        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     })();
   }, [token]);
 
-  function bookCollection(id, amount) {
-    if (Number(amount) <= 0) {
-      alert("Please Enter how many kilos you will dispose");
-      return;
-    }
-    (async () => {
-      try {
-        const data = await createCollectionRequest(id, amount, token);
-        alert(data.message);
-      } catch (err) {
-        console.error(err);
-      }
-    })();
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
   }
 
   return (
     <div className="font-body">
       <h4 className="font-semibold mb-1">Available Dates</h4>
       {dates.length ? (
-        dates.map((el, i) => {
-          return (
-            <div key={i} className="flex flex-col gap-2">
-              <p>{new Date(el.collection_date).toDateString()}</p>
-              <div className="flex items-center gap-3 w-full">
-                <input
-                  type="number"
-                  placeholder="Disposal Amount"
-                  name="amount"
-                  id="amount"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="w-5/12 p-2 outline-none h-8 border-2 font-body border-black placeholder:font-body disabled:cursor-not-allowed"
-                />
-                <button
-                  className="bg-green text-white text-sm h-8 px-3"
-                  onClick={() => bookCollection(el.id, amount)}
-                >
-                  Book
-                </button>
-              </div>
-            </div>
-          );
+        dates.map((el) => {
+          return <HouseholdAmountDisposed key={el.id} data={el} />;
         })
       ) : (
         <p>No Dates Available</p>

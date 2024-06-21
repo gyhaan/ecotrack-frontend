@@ -1,24 +1,47 @@
-function HouseholdAmountDisposed() {
+import { useState } from "react";
+import { useUser } from "../../Context/ContextProvider";
+import { createCollectionRequest } from "../../services/api";
+
+function HouseholdAmountDisposed({ data }) {
+  const { token } = useUser();
+  const [amount, setAmount] = useState(0);
+  console.log(data);
+
+  function bookCollection(id, amount) {
+    if (Number(amount) <= 0) {
+      alert("Please Enter how many kilos you will dispose");
+      return;
+    }
+    (async () => {
+      try {
+        const data = await createCollectionRequest(id, amount, token);
+        alert(data);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }
+
   return (
-    <div>
-      <h4 className="font-semibold mb-1">Amount Disposed</h4>
-      <div className="flex items-center gap-2 mb-3">
-        <label htmlFor="amount" className="font-medium">
-          Add Amount(Kg):
-        </label>
+    <div className="flex flex-col gap-2">
+      <p>{new Date(data?.collection_date).toDateString()}</p>
+      <div className="flex items-center gap-3 w-full">
         <input
           type="number"
+          placeholder="Disposal Amount"
           name="amount"
           id="amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
           className="w-5/12 p-2 outline-none h-8 border-2 font-body border-black placeholder:font-body disabled:cursor-not-allowed"
         />
-        <button className="bg-green block font-body rounded-full text-white disabled:cursor-not-allowed w-7 h-7">
-          &#43;
+        <button
+          className="bg-green text-white text-sm h-8 px-3"
+          onClick={() => bookCollection(data.id, amount)}
+        >
+          Book
         </button>
       </div>
-      <p>
-        <span className="font-medium">Total:</span> 23kg
-      </p>
     </div>
   );
 }

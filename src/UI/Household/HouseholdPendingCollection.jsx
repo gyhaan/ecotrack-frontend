@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchCollectionRequests } from "../../services/api";
+import { fetchCollectionRequests, patchRequest } from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
 function HouseholdPendingCollection() {
   const { token } = useUser();
@@ -16,17 +16,37 @@ function HouseholdPendingCollection() {
       }
     })();
   }, [token]);
+
+  function patch(id) {
+    (async () => {
+      try {
+        const data = await patchRequest(id, token);
+        console.log(data);
+      } catch (err) {
+        throw new Error(err);
+      }
+    })();
+  }
   return (
     <div>
       <h4 className="font-semibold mb-1">Pending Collections</h4>
       <div>
         {collectionRequests.length ? (
           collectionRequests?.map((el) => (
-            <div className="flex items-center gap-2" key={el.id}>
+            <div className="flex items-center gap-2 mb-3" key={el.id}>
               <div>
                 <img src="/yellow.svg" alt="green" />
               </div>
-              <span>{new Date(el.collection_date.date).toDateString()}</span>
+              <span>
+                {new Date(el.collection_date.collection_date).toDateString()}
+              </span>
+              <span>({el.amount}Kg)</span>
+              <button
+                className="bg-green text-white text-sm h-8 px-3"
+                onClick={() => patch(el.id)}
+              >
+                Done
+              </button>
             </div>
           ))
         ) : (

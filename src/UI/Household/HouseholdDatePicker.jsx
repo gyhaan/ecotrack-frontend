@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
-import { fetchCollectionDates } from "../../services/api";
+import {
+  createCollectionRequest,
+  fetchCollectionDates,
+} from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
+import HouseholdAmountDisposed from "./HouseholdAmountDisposed";
 
 const fakeData = [
   {
@@ -20,32 +24,39 @@ const fakeData = [
 function HouseholdDatePicker() {
   const { token } = useUser();
   const [dates, setDates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   console.log(dates);
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
+      setError(null);
       try {
         const data = await fetchCollectionDates(token);
         setDates(data);
       } catch (err) {
-        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     })();
   }, [token]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="font-body">
       <h4 className="font-semibold mb-1">Available Dates</h4>
       {dates.length ? (
-        dates.map((el, i) => {
-          return (
-            <div key={i} className="flex items-center gap-5 ">
-              <p>{new Date(el.collection_date).toDateString()}</p>
-              <button className="bg-green text-white text-sm px-3 py-1">
-                Book
-              </button>
-            </div>
-          );
+        dates.map((el) => {
+          return <HouseholdAmountDisposed key={el.id} data={el} />;
         })
       ) : (
         <p>No Dates Available</p>

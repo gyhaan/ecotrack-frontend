@@ -1,43 +1,43 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUser } from "../../Context/ContextProvider";
-import { fetchCollectionRequests } from "../../services/api";
+import { getCollectionById } from "../../services/api";
 
-function HouseholdCompletedCollection() {
+function CollectorCompletedCollection({ data }) {
   const { token } = useUser();
-  const [collectionRequests, setCollectionRequests] = useState([]);
+  const [requests, setRequest] = useState([]);
 
-  useEffect(() => {
+  function fetchRequest() {
     (async () => {
       try {
-        const data = await fetchCollectionRequests(token);
-        setCollectionRequests(() => {
-          return data.filter((el) => el.status === "pending");
-        });
+        const result = await getCollectionById(data.id, token);
+        console.log(result);
+        setRequest((requests) => [...requests, result]);
       } catch (err) {
-        console.error(err.message);
+        console.error(err);
+        alert("Failed to get collection");
       }
     })();
-  }, [token]);
+  }
 
   return (
     <div>
-      <h4 className="font-semibold mb-1">Completed Collections</h4>
+      <h4 className="font-semibold mb-1">Collection Dates</h4>
       <div>
-        {collectionRequests.length ? (
-          collectionRequests?.map((el) => (
-            <div className="flex items-center gap-2" key={el.id}>
-              <div>
-                <img src="/yellow.svg" alt="green" />
-              </div>
-              <span>{new Date(el.collection_date.date).toDateString()}</span>
-            </div>
-          ))
-        ) : (
-          <p>No Requests Completed</p>
-        )}
+        <div className="flex items-center gap-2">
+          <div>
+            <img src="/yellow.svg" alt="green" />
+          </div>
+          <span>{new Date(data.collection_date).toDateString()}</span>
+          <button
+            className="max-w-fit bg-green h-9 block font-body text-white px-6 disabled:cursor-not-allowed"
+            onClick={() => fetchRequest()}
+          >
+            See Pending
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default HouseholdCompletedCollection;
+export default CollectorCompletedCollection;

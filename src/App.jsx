@@ -11,8 +11,20 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import ViewHouseholdUser from "./pages/ViewHouseholdUser";
 import ViewCollector from "./pages/ViewCollector";
 import Home from "./pages/Home";
+import { useEffect, useState } from "react";
+import LoadingPage from "./pages/LoadingPage";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <LoadingPage />;
+  }
   return (
     <ContextProvider>
       <BrowserRouter>

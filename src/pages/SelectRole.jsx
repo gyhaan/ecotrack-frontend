@@ -4,6 +4,8 @@ import HouseholdInput from "../UI/Household/HouseholdInput";
 import CollectorInput from "../UI/Collector/CollectorInput";
 import { useUser } from "../Context/ContextProvider";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const roles = [
   { name: "Household", value: "households" },
@@ -12,7 +14,7 @@ const roles = [
 
 function SelectRole() {
   const navigate = useNavigate();
-  const { token, setToken } = useUser();
+  const { token, setToken, setUserRole } = useUser();
   const [role, setRole] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
   const [area, setArea] = useState("");
@@ -43,14 +45,17 @@ function SelectRole() {
         }
         await addCollector(assignedArea, token);
       }
-      setToken("");
-      alert(
-        "You will now be redirected to the login page. Please use your new username and password to log in."
-      );
-      navigate("/register");
+      setUserRole(role); // Set user role in context
+      toast.success("Account created successfully!");
+      setTimeout(() => {
+        setToken("");
+        navigate("/");
+      }, 3000);
     } catch (err) {
       console.error(err);
-      alert("An error occurred while assigning the role. Please try again.");
+      toast.error(
+        "An error occurred while assigning the role. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -101,6 +106,7 @@ function SelectRole() {
       >
         Continue
       </button>
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
     </div>
   );
 }

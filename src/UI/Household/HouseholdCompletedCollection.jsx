@@ -36,7 +36,7 @@ function HouseholdCompletedCollection({
             </div>
           ))
         ) : (
-          <p>No Requests Made</p>
+          <p className="mb-3">No Requests Made</p>
         )}
       </div>
     </div>

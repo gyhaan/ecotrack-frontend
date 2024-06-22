@@ -9,7 +9,7 @@ function ProtectedRoute({ children }) {
 
   useEffect(() => {
     if (!token && pathname !== "/") {
-      navigate("/");
+      navigate("/register");
     }
   }, [token, navigate, pathname]);
 

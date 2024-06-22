@@ -162,8 +162,7 @@ export async function fetchCompletedCollections(token) {
   }
 }
 
-export async function fetchPendingCollections() {
-  const { token } = useUser();
+export async function fetchPendingCollections({ token }) {
   try {
     const res = await fetch(`/api/collection_dates`, {
       headers: {

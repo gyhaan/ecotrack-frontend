@@ -391,41 +391,6 @@ export async function deleteCollectorById(id, token) {
   }
 }
 
-export async function createCollectionRequest(id, amount, token) {
-  try {
-    const body = JSON.stringify({
-      amount: Number(amount),
-      collection_date_id: id,
-    });
-    console.log(body);
-
-    const res = await fetch("/api/collection_requests", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json", // Ensure the Content-Type header is set
-      },
-      body: body,
-    });
-
-    if (!res.ok) {
-      // Check if the server provides additional error information
-      const errorData = await res.json();
-      console.error("Error:", errorData);
-      throw new Error(
-        errorData.message || "Failed to create collection request"
-      );
-    }
-
-    const data = await res.json();
-    console.log(data);
-    return data;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
-  }
-}
-
 export async function patchRequest(id, token) {
   try {
     const res = await fetch(`/api/collection_requests/${id}`, {
@@ -489,4 +454,3 @@ export async function getCollectionDates(token) {
     throw new Error(err.message);
   }
 }
-

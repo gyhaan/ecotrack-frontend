@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         green: "#004D00",
-        snow: "#F7F7F7",
+        snow: "#F8FDF8",
         yellow: "#FFD600",
       },
       fontFamily: {

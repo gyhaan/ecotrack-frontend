@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { fetchCollectionRequests } from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
 
-function HouseholdCompletedCollection() {
+function HouseholdCompletedCollection({
+  collectionRequestsDone,
+  setCollectionRequestsDone,
+}) {
   const { token } = useUser();
-  const [collectionRequests, setCollectionRequests] = useState([]);
+
   useEffect(() => {
     (async () => {
       try {
         const data = await fetchCollectionRequests(token);
-        setCollectionRequests(() => {
+        setCollectionRequestsDone(() => {
           return data.filter((el) => el.status === "completed");
         });
       } catch (err) {
@@ -21,9 +24,9 @@ function HouseholdCompletedCollection() {
     <div>
       <h4 className="font-semibold mb-1">Completed Collections</h4>
       <div>
-        {collectionRequests.length ? (
-          collectionRequests?.map((el) => (
-            <div className="flex items-center gap-2" key={el.id}>
+        {collectionRequestsDone.length ? (
+          collectionRequestsDone?.map((el) => (
+            <div className="flex items-center gap-2 my-1" key={el.id}>
               <div>
                 <img src="/green.svg" alt="green" />
               </div>

@@ -21,7 +21,7 @@ const fakeData = [
   },
 ];
 
-function HouseholdDatePicker() {
+function HouseholdDatePicker({ setCollectionRequests }) {
   const { token } = useUser();
   const [dates, setDates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +56,13 @@ function HouseholdDatePicker() {
       <h4 className="font-semibold mb-1">Available Dates</h4>
       {dates.length ? (
         dates.map((el) => {
-          return <HouseholdAmountDisposed key={el.id} data={el} />;
+          return (
+            <HouseholdAmountDisposed
+              key={el.id}
+              data={el}
+              setCollectionRequests={setCollectionRequests}
+            />
+          );
         })
       ) : (
         <p>No Dates Available</p>

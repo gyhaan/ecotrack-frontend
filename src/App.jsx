@@ -10,14 +10,16 @@ import { ContextProvider } from "./Context/ContextProvider";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import ViewHouseholdUser from "./pages/ViewHouseholdUser";
 import ViewCollector from "./pages/ViewCollector";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <ContextProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route
-            path="/"
+            path="/register"
             element={
               <ProtectedRoute>
                 <AppLayout />

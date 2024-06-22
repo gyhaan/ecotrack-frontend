@@ -371,15 +371,34 @@ export async function patchRequest(id, token) {
 
 export async function getCollectionById(id, token) {
   try {
-    const res = await fetch(`/collection_dates/${id}`, {
+    const res = await fetch(`/api/collection_dates/${id}/collection_requests`, {
       method: "GET",
       headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err.message);
+  }
+}
+
+export async function getCollectionDates(token) {
+  try {
+    const res = await fetch(`/api/collection_dates`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
 
     if (!res.ok) {
-      throw new Error("failed to get collection");
+      throw new Error("Failed to fetch Data");
     }
 
     const data = await res.json();

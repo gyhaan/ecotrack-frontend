@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useUser } from "../../Context/ContextProvider";
-import { createCollectionRequest } from "../../services/api";
+import {
+  createCollectionRequest,
+  fetchCollectionRequests,
+} from "../../services/api";
 
-function HouseholdAmountDisposed({ data }) {
+function HouseholdAmountDisposed({ data, setCollectionRequests }) {
   const { token } = useUser();
   const [amount, setAmount] = useState(0);
   console.log(data);
@@ -14,8 +17,13 @@ function HouseholdAmountDisposed({ data }) {
     }
     (async () => {
       try {
-        const data = await createCollectionRequest(id, amount, token);
-        alert(data);
+        await createCollectionRequest(id, amount, token);
+        setAmount(0);
+        const result = await fetchCollectionRequests(token);
+        setCollectionRequests(() => {
+          return result.filter((el) => el.status === "pending");
+        });
+        alert("Booking successful");
       } catch (err) {
         console.error(err);
       }
@@ -23,7 +31,7 @@ function HouseholdAmountDisposed({ data }) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1 mb-3">
       <p>{new Date(data?.collection_date).toDateString()}</p>
       <div className="flex items-center gap-3 w-full">
         <input

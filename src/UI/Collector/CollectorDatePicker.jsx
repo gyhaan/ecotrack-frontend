@@ -1,25 +1,45 @@
-import { useState } from "react";
-import { createCollectionDate } from "../../services/api";
+import { useEffect, useState } from "react";
+import { createCollectionDate, getCollectionDates } from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
 import CollectorCompletedCollection from "./CollectorCompletedCollection";
 
 const CollectorDatePicker = () => {
   const [date, setDate] = useState("");
-  const [collectionDate, setCollectionDate] = useState(function () {
-    const result = sessionStorage.getItem("collection");
-    return JSON.parse(result) || [];
-  });
+  const [collectionDate, setCollectionDate] = useState([]);
   const { token } = useUser();
+  console.log(collectionDate, "hi");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const result = await getCollectionDates(token);
+
+        // Filter out collection dates where all requests have status "completed"
+        // or where collection_requests is an empty array
+        const filteredResult = result.filter(
+          (dateItem) =>
+            dateItem.collection_requests.length === 0 ||
+            !dateItem.collection_requests.every(
+              (request) => request.status === "completed"
+            )
+        );
+
+        setCollectionDate((collectionDate) => [
+          ...collectionDate,
+          ...filteredResult,
+        ]);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, [token]);
 
   function collectorDate() {
     (async () => {
       try {
-        const data = await createCollectionDate(date, token);
-        setCollectionDate((collectionDate) => [...collectionDate, data]);
-        sessionStorage.setItem(
-          "collection",
-          JSON.stringify([...collectionDate, data])
-        );
+        await createCollectionDate(date, token);
+        const result = await getCollectionDates(token);
+        setCollectionDate(result);
         alert("collection created successfully");
       } catch (err) {
         alert(err.message);
@@ -53,9 +73,13 @@ const CollectorDatePicker = () => {
           Send
         </button>
       </div>
-      {collectionDate?.map((el, i) => (
-        <CollectorCompletedCollection key={i} data={el} />
-      ))}
+      <div className="flex flex-col gap-5">
+        <h4 className="font-semibold mb-1">Collection Dates</h4>
+        {collectionDate?.map((el, i) => {
+          console.log(el); // This will log each element to the console
+          return <CollectorCompletedCollection key={i} data={el} />;
+        })}
+      </div>
     </>
   );
 };

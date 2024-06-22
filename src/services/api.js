@@ -234,51 +234,6 @@ export async function createCollectionRequest(id, amount, token) {
   }
 }
 
-export async function patchRequest(id, token) {
-  try {
-    const res = await fetch(`/api/collection_requests/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ status: "completed" }),
-    });
-
-    if (!res.ok) {
-      throw new Error("Failed to Patch");
-    }
-
-    const data = await res.json();
-    console.log(data);
-    return data;
-  } catch (err) {
-    console.error(err.message);
-    throw new Error(err);
-  }
-}
-
-export async function getCollectionById(id, token) {
-  try {
-    const res = await fetch(`/collection_dates/${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      throw new Error("failed to get collection");
-    }
-
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err.message);
-  }
-}
-
 export async function getAllHouseholds(token) {
   try {
     const res = await fetch("/api/households", {

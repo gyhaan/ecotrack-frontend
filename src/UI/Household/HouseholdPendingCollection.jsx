@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { fetchCollectionRequests, patchRequest } from "../../services/api";
 import { useUser } from "../../Context/ContextProvider";
-function HouseholdPendingCollection() {
+function HouseholdPendingCollection({
+  collectionRequests,
+  setCollectionRequests,
+  setCollectionRequestsDone,
+}) {
   const { token } = useUser();
-  const [collectionRequests, setCollectionRequests] = useState([]);
+
   useEffect(() => {
     (async () => {
       try {
@@ -21,6 +25,15 @@ function HouseholdPendingCollection() {
     (async () => {
       try {
         const data = await patchRequest(id, token);
+        const result = await fetchCollectionRequests(token);
+        alert("Collection Completed");
+        setCollectionRequests(() => {
+          return result.filter((el) => el.status === "pending");
+        });
+        setCollectionRequestsDone(() => {
+          return result.filter((el) => el.status === "completed");
+        });
+
         console.log(data);
       } catch (err) {
         throw new Error(err);

@@ -47,7 +47,7 @@ function SelectRole() {
       alert(
         "You will now be redirected to the login page. Please use your new username and password to log in."
       );
-      navigate("/");
+      navigate("/register");
     } catch (err) {
       console.error(err);
       alert("An error occurred while assigning the role. Please try again.");
